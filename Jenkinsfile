@@ -1,5 +1,5 @@
 pipeline{
-  agent {label 'Built-In Node'}
+  agent {label 'agentLinux'}
 
   stages{
     stage('Check Version'){
