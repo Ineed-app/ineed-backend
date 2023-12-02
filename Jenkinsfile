@@ -10,7 +10,9 @@ pipeline{
       }
     }
     stage('Stop Node'){
+      steps{
         sh "pm2 stop all"
+      }
     }
     // stage('Start Node'){
     //     sh "pm2 start"
