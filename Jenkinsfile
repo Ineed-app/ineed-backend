@@ -3,11 +3,17 @@ pipeline{
   agent {label 'agentLinux'}
 
   stages{
-    stage('Check Version'){
+    stage('Install Dependencies'){
       steps {
-        sh "node --version"
-        sh "npm --version"
+        sh "npm install"
+        sh "npm cache clean -f"
       }
     }
+    stage('Stop Node'){
+        sh "pm2 stop all"
+    }
+    // stage('Start Node'){
+    //     sh "pm2 start"
+    // }
   }
 }
