@@ -1,5 +1,5 @@
 pipeline{
-  tools {nodejs 'NodeJs'}
+  agent {label 'Built-In Node'}
 
   stages{
     stage('Check Version'){
