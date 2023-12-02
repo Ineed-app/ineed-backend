@@ -1,8 +1,6 @@
+properties([pipelineTriggers([githubPush()])])
 pipeline{
   agent {label 'agentLinux'}
-  triggers {
-    githubPush()
-  }
 
   stages{
     stage('Check Version'){
