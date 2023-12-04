@@ -5,12 +5,19 @@ mongoose.set('strictQuery', false);
 const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express()
-    // const https = require("https")
-    // const http = require("http")
-    // const fs = require('fs')
+const { initializeApp, applicationDefault } = require('firebase-admin/app');
+// const https = require("https")
+// const http = require("http")
+// const fs = require('fs')
 
 // env
 dotenv.config();
+
+process.env['GOOGLE_APPLICATION_CREDENTIALS'] = "./ineed-firebase-private-key.json";
+initializeApp({
+    credential: applicationDefault(),
+    projectId: 'ineed-6f0f3',
+});
 
 // middleware
 app.use(express.json())

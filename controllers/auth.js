@@ -2,6 +2,7 @@ const Auth = require("../models/Auth");
 const jwt = require("jsonwebtoken");
 const { response } = require("express");
 const usernames = require('marvel-dc-name-generator');
+const { set } = require("mongoose");
 
 
 // Register
@@ -9,9 +10,9 @@ exports.register = async(req, res) => {
     try {
         console.log("I am in")
         if (!req.body.device_id)
-            return res.status(400).send({ message: "please enter name" });
+            return res.status(400).send({ message: "please enter device_id" });
         if (!req.body.fcm_token)
-            return res.status(400).send({ message: "please enter mobile number" });
+            return res.status(400).send({ message: "please enter fcm_token" });
 
         // const device_id = await Auth.findOne({ device_id: req.body.device_id });
         // if (device_id) {
@@ -37,6 +38,44 @@ exports.register = async(req, res) => {
         } else {
             return res.status(400).json({ message: "auth not saved" });
         }
+
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+// Register
+exports.updatename = async(req, res) => {
+    try {
+
+        if (!req.body.name)
+            return res.status(400).send({ message: "please enter name" });
+
+        const updatename = await Auth.updateOne({ device_id: req.device_id }, {
+            $set: {
+                name: req.body.name
+            }
+        });
+
+        if (updatename)
+            return res.status(200).json({ message: "Updated Successfully" });
+        else
+            return res.status(400).json({ message: "auth not saved" });
+
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+// user
+exports.getuser = async(req, res) => {
+    try {
+        const user = await Auth.findOne({ device_id: req.device_id });
+
+        if (user)
+            return res.status(200).json({ user: user });
+        else
+            return res.status(400).json({ message: "Try again" });
 
     } catch (error) {
         return res.status(400).json({ message: error });
