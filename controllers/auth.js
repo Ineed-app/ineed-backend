@@ -14,10 +14,13 @@ exports.register = async(req, res) => {
         if (!req.body.fcm_token)
             return res.status(400).send({ message: "please enter fcm_token" });
 
-        // const device_id = await Auth.findOne({ device_id: req.body.device_id });
-        // if (device_id) {
-        //     return res.status(400).json({ mes: "User Already Exist. Please Login" });
-        // }
+        const existing_user = await Auth.findOne({ device_id: req.body.device_id });
+        if (existing_user) {
+            const token1 = jwt.sign({ user: existing_user }, process.env.JWT_TOKEN_SECRET);
+            response.user = existing_user;
+            response.token = token1;
+            return res.status(202).json(response);
+        }
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         const auth = await Auth({
