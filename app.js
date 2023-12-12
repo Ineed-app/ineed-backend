@@ -8,9 +8,9 @@ const io = new Server(server);
 app.get('/', (req, res) => {
     return res.status(400).json({ message: "working" });
 });
-// app.get('/chattest', (req, res) => {
-//     res.sendFile(__dirname + '/index.html');
-// });
+app.get('/chattest', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
 
 io.on('connection', (socket) => {
     console.log('a user connected');
