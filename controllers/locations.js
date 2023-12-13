@@ -65,7 +65,14 @@ exports.del_clocation = async(req, res) => {
 // Get Locations
 exports.get_locations = async(req, res) => {
     try {
-        const locations = await Location.find();
+        const locations = await Location.aggregate([{
+            $lookup: {
+                from: "users",
+                localField: "device_id",
+                foreignField: "device_id",
+                as: "user",
+            },
+        }, ]);
         if (locations) {
             return res.status(200).json(locations);
         } else {
