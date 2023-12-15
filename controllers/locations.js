@@ -72,7 +72,7 @@ exports.get_locations = async(req, res) => {
                 foreignField: "device_id",
                 as: "user",
             },
-        }, ]);
+        }]);
         if (locations) {
             return res.status(200).json(locations);
         } else {
