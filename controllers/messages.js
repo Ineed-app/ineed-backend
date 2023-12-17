@@ -30,7 +30,7 @@ exports.send_message = async(data) => {
 exports.getallmessages = async(req, res) => {
 
     try {
-        if (!req.body.receiver_id)
+        if (!req.params.receiver_id)
             res.status(400).json({ message: "receiver_id is missing" })
 
         console.log("i am in controller");
@@ -42,9 +42,9 @@ exports.getallmessages = async(req, res) => {
         for (let index = 0; index < messages.length; index++) {
             const element = messages[index];
 
-            if (element.sender_id == req.device_id && element.receiver_id == req.body.receiver_id)
+            if (element.sender_id == req.device_id && element.receiver_id == req.params.receiver_id)
                 res_messages.push(element)
-            else if (element.sender_id == req.body.receiver_id && element.receiver_id == req.device_id)
+            else if (element.sender_id == req.params.receiver_id && element.receiver_id == req.device_id)
                 res_messages.push(element)
         }
 

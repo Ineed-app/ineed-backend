@@ -85,6 +85,21 @@ exports.getuser = async(req, res) => {
     }
 };
 
+// user
+exports.getspecificuser = async(req, res) => {
+    try {
+        const user = await Auth.findOne({ device_id: req.params.device_id });
+
+        if (user)
+            return res.status(200).json({ user: user });
+        else
+            return res.status(400).json({ message: "Try again" });
+
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
 // Test
 exports.test = async(req, res) => {
     return res.status(200).json({ message: "Test successful" });

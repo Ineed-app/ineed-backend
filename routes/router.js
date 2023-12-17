@@ -16,6 +16,7 @@ const messagecontroller = require('../controllers/messages')
 router.post("/register", authcontroller.register);
 router.put("/updatename", verify, authcontroller.updatename);
 router.get("/user", verify, authcontroller.getuser);
+router.get("/user/:device_id", verify, authcontroller.getspecificuser);
 
 //Notifications
 router.post('/notification/test', notificationcontroller.test);
@@ -43,7 +44,7 @@ router.put("/services/:serviceid", servicecontroller.update_service)
 
 //messages
 router.post("/message", verify, messagecontroller.send_message)
-router.get("/onload", verify, messagecontroller.getallmessages)
+router.get("/onloadmessages/:receiver_id", verify, messagecontroller.getallmessages)
 
 
 module.exports = router;
