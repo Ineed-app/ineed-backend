@@ -9,6 +9,7 @@ const verify = require('../utils/verifytoken');
 const locationcontroller = require("../controllers/locations");
 const servicecatcontroller = require("../controllers/servicecat")
 const servicecontroller = require("../controllers/services")
+const messagecontroller = require('../controllers/messages')
 
 
 // Auth
@@ -39,5 +40,9 @@ router.post("/services", servicecontroller.post_service)
 router.delete("/services/:serviceid", servicecontroller.del_service)
 router.get("/services", servicecontroller.getall_service)
 router.put("/services/:serviceid", servicecontroller.update_service)
+
+//messages
+router.post("/message", verify, messagecontroller.send_message)
+
 
 module.exports = router;

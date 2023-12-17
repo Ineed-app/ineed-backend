@@ -8,11 +8,13 @@ const app = express()
 const { initializeApp, applicationDefault } = require('firebase-admin/app');
 // const https = require("https")
 const http = require("http")
-    // const fs = require('fs')
+const messagescontroller = require('./controllers/messages');
+// const fs = require('fs')
 
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
+
 
 // env
 dotenv.config();
@@ -21,6 +23,10 @@ process.env['GOOGLE_APPLICATION_CREDENTIALS'] = "./ineed-firebase-private-key.js
 initializeApp({
     credential: applicationDefault(),
     projectId: 'ineed-6f0f3',
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index2.html');
 });
 
 // middleware
@@ -46,16 +52,16 @@ mongoose
 app.use("/api/", require("./routes/router"));
 
 io.on('connection', (socket) => {
+    mysocket = socket;
+    myio = io;
     console.log('a user connected');
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
-    socket.on('chat message', (msg) => {
-        console.log(msg)
-        let resdata = {
-            message: msg
-        }
-        io.emit('chat message', resdata);
+    socket.on('sendmessage', (data) => {
+        console.log(data)
+        messagescontroller.send_message(data);
+        io.emit('receivemessage', data);
     });
 });
 

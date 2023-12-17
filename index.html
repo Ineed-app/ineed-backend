@@ -1,95 +1,64 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Socket.IO chat</title>
-    <style>
-        body {
-            margin: 0;
-            padding-bottom: 3rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        
-        #form {
-            background: rgba(0, 0, 0, 0.15);
-            padding: 0.25rem;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            display: flex;
-            height: 3rem;
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-        }
-        
-        #input {
-            border: none;
-            padding: 0 1rem;
-            flex-grow: 1;
-            border-radius: 2rem;
-            margin: 0.25rem;
-        }
-        
-        #input:focus {
-            outline: none;
-        }
-        
-        #form>button {
-            background: #333;
-            border: none;
-            padding: 0 1rem;
-            margin: 0.25rem;
-            border-radius: 3px;
-            outline: none;
-            color: #fff;
-        }
-        
-        #messages {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        
-        #messages>li {
-            padding: 0.5rem 1rem;
-        }
-        
-        #messages>li:nth-child(odd) {
-            background: #efefef;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Anon Chat App</title>
 </head>
 
 <body>
-    <ul id="messages"></ul>
-    <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Send</button>
-    </form>
-
+    <div class="flex-1 p:2 sm:p-6 justify-between flex flex-col h-screen">
+        <div id="messages" class="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
+        </div>
+        <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
+            <div class="relative flex">
+                <input type="text" placeholder="Write your message!" class="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3">
+                <div class="absolute right-0 items-center inset-y-0 hidden sm:flex">
+                    <button type="button" class="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none">
+                    <span class="font-bold">Send</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-6 w-6 ml-2 transform rotate-90">
+                       <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                    </svg>
+                 </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-
     <script>
-        var socket = io();
-        socket.connect()
+        const messageBox = document.querySelector("#messages");
+        const textBox = document.querySelector("input");
+        const sendButton = document.querySelector("button");
 
-        var messages = document.getElementById('messages');
-        var form = document.getElementById('form');
-        var input = document.getElementById('input');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (input.value) {
-                socket.emit('chat message', input.value);
-                input.value = '';
+        function createMessage(text, ownMessage = false) {
+            const messageElement = document.createElement("div");
+            messageElement.className = "chat-message";
+            const subMesssageElement = document.createElement("div");
+            subMesssageElement.className = "px-4 py-4 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600";
+            if (ownMessage) {
+                subMesssageElement.className += " float-right bg-blue-800 text-white";
             }
+            subMesssageElement.innerText = text;
+            messageElement.appendChild(subMesssageElement);
+            messageBox.appendChild(messageElement);
+        }
+        const socket = io();
+        socket.connect();
+        socket.on("connection", (socket) => {
+            console.log(socket.id);
         });
-
-        socket.on('chat message', function(msg) {
-            var item = document.createElement('li');
-            item.textContent = msg;
-            messages.appendChild(item);
-            window.scrollTo(0, document.body.scrollHeight);
+        socket.on("receivemessage", (message) => {
+            createMessage(message);
+        });
+        sendButton.addEventListener("click", () => {
+            if (textBox.value != "") {
+                socket.emit("send-message", textBox.value);
+                createMessage(textBox.value,
+                    true);
+                textBox.value = "";
+            }
         });
     </script>
 </body>
