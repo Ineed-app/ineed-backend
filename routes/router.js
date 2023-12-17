@@ -43,6 +43,7 @@ router.put("/services/:serviceid", servicecontroller.update_service)
 
 //messages
 router.post("/message", verify, messagecontroller.send_message)
+router.get("/onload", verify, messagecontroller.getallmessages)
 
 
 module.exports = router;

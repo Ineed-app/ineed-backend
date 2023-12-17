@@ -27,23 +27,33 @@ exports.send_message = async(data) => {
     }
 };
 
-exports.getallmessages = async(data) => {
-    console.log("i am in controller", data);
+exports.getallmessages = async(req, res) => {
 
-    const messages = await Message.find();
+    try {
+        if (!req.body.receiver_id)
+            res.status(400).json({ message: "receiver_id is missing" })
 
-    var res_messages = [];
+        console.log("i am in controller");
 
-    for (let index = 0; index < messages.length; index++) {
-        const element = messages[index];
+        const messages = await Message.find();
 
-        if (element.sender_id == data.sender_id && element.receiver_id == data.receiver_id)
-            res_messages.push(element)
-        else if (element.sender_id == data.receiver_id && element.receiver_id == data.sender_id)
-            res_messages.push(element)
+        var res_messages = [];
+
+        for (let index = 0; index < messages.length; index++) {
+            const element = messages[index];
+
+            if (element.sender_id == req.device_id && element.receiver_id == req.body.receiver_id)
+                res_messages.push(element)
+            else if (element.sender_id == req.body.receiver_id && element.receiver_id == req.device_id)
+                res_messages.push(element)
+        }
+
+        return res.status(200).json(res_messages);
+    } catch (error) {
+        return res.status(400).json({ message: error });
     }
 
-    return res_messages;
+
 
 
 }
