@@ -63,6 +63,13 @@ io.on('connection', (socket) => {
         messagescontroller.send_message(data);
         io.emit('receivemessage', data);
     });
+
+    socket.on('loadmessages', (data) => {
+        console.log(data)
+        const result = messagescontroller.getallmessages(data)
+        console.log(result)
+        io.emit('OnLoadMessages', result)
+    })
 });
 
 server.listen(3000, () => {
