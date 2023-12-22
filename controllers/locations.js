@@ -96,8 +96,29 @@ exports.get_locations = async(req, res) => {
             }
         });
 
+        var finres = [];
+
+        console.log(locations.length)
+        for (let index = 0; index < locations.length; index++) {
+            var element = locations[index];
+            let tempelement = {
+                "_id": element._id,
+                "device_id": element.device_id,
+                "location": [{
+                    "type": element.location.type,
+                    "coordinates": element.location.coordinates,
+                    "_id": element.location._id
+                }],
+                "createdAt": element.createdAt,
+                "updatedAt": element.updatedAt,
+                "location_id": element.location_id
+            }
+            finres.push(tempelement)
+        }
+
+
         if (locations) {
-            return res.status(200).json(locations);
+            return res.status(200).json({ "locations": finres });
         } else {
             return res.status(400).json({ message: "No Locations" });
         }
