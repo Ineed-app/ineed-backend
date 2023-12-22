@@ -27,7 +27,9 @@ router.get("/test", authcontroller.test);
 //Maps
 router.post("/clocation", verify, locationcontroller.current_location)
 router.delete("/del_clocation", verify, locationcontroller.del_clocation)
-router.get("/locations", verify, locationcontroller.get_locations)
+router.post("/locations", verify, locationcontroller.get_locations)
+router.get("/tryloc", locationcontroller.trylocation)
+router.get("/testlocation", locationcontroller.testlocation)
 
 // Service category
 router.post("/servicecat", servicecatcontroller.post_servicecat)
