@@ -1,37 +1,29 @@
-const messageBox = document.querySelector("#messages");
-const textBox = document.querySelector("input");
-const sendButton = document.querySelector("button");
+const fs = require('fs');
+const AWS = require('aws-sdk');
 
-function createMessage(text, ownMessage = false) {
-    const messageElement = document.createElement("div");
-    messageElement.className = "chat-message";
-    const subMesssageElement = document.createElement("div");
-    subMesssageElement.className =
-        "px-4 py-4 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600";
-    if (ownMessage) {
-        subMesssageElement.className += " float-right bg-blue-800 text-white";
-    }
-    subMesssageElement.innerText = text;
-    messageElement.appendChild(subMesssageElement);
-
-    messageBox.appendChild(messageElement);
-}
-
-const socket = io();
-socket.connect();
-
-socket.on("connection", (socket) => {
-    console.log(socket.id);
+const s3 = new AWS.S3({
+    accessKeyId: 'AKIAUBFHYX5ITC6AYH2L',
+    secretAccessKey: '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'
 });
 
-socket.on("receive-message", (message) => {
-    createMessage(message);
-});
+const uploadFile = (fileName) => {
+    // Read content from the file
+    const fileContent = fs.readFileSync(fileName);
 
-sendButton.addEventListener("click", () => {
-    if (textBox.value != "") {
-        socket.emit("send-message", textBox.value);
-        createMessage(textBox.value, true);
-        textBox.value = "";
-    }
-});
+    // Setting up S3 upload parameters
+    const params = {
+        Bucket: 'ineed-messages',
+        Key: 'voices/ineed.3gp', // File name you want to save as in S3
+        Body: fileContent
+    };
+
+    // Uploading files to the bucket
+    s3.upload(params, function(err, data) {
+        if (err) {
+            throw err;
+        }
+        console.log(`File uploaded successfully. ${data.Location}`);
+    });
+};
+
+uploadFile('./ineed.3gp');

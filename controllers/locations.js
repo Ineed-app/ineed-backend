@@ -18,7 +18,7 @@ exports.current_location = async(req, res) => {
             const updatelocation = await Location.updateOne({ device_id: req.device_id }, {
                 $set: {
                     location: {
-                        coordinates: [req.body.clat, req.body.clng]
+                        coordinates: [parseFloat(req.body.clat), parseFloat(req.body.clng)]
                     }
                 }
             });

@@ -19,6 +19,16 @@ const schema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    basepay: {
+        type: String,
+        required: false,
+        default: "1"
+    },
+    payfirst: {
+        type: Boolean,
+        required: false,
+        default: true
+    }
 }, { timestamps: true });
 
 schema.plugin(autoIncrement, { inc_field: `user_id` });

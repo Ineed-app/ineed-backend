@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     message: {
         type: String,
         required: true,
+    },
+    type: {
+        type: String,
+        required: true,
     }
 }, { timestamps: true });
 
