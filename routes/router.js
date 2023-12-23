@@ -10,6 +10,7 @@ const locationcontroller = require("../controllers/locations");
 const servicecatcontroller = require("../controllers/servicecat")
 const servicecontroller = require("../controllers/services")
 const messagecontroller = require('../controllers/messages')
+const fileuploadcontroller = require('../controllers/fileupload')
 
 
 // Auth
@@ -47,6 +48,10 @@ router.put("/services/:serviceid", servicecontroller.update_service)
 //messages
 router.post("/message", verify, messagecontroller.send_message)
 router.get("/onloadmessages/:receiver_id", verify, messagecontroller.getallmessages)
+
+//fileupload
+router.post("/fileupload", verify, fileuploadcontroller.fileupload)
+
 
 
 module.exports = router;
