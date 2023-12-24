@@ -36,50 +36,6 @@ const upload = () =>
     });
 
 // Send Message
-exports.send_message_with_image = async(data) => {
-    try {
-        const uploadsingle = upload().single("anyfile");
-        uploadsingle(req, res, async(err) => {
-                // console.log(req.body, req.file);
-                if (err) {
-                    return res.status(400).json({ success: false, message: err.message });
-                }
-                // validations
-                if (req.file) {
-                    anyfile = req.file.location;
-
-                } else {
-                    anyfile = req.body.anyfile;
-
-                }
-
-                const newmessage = await Message({
-                    sender_id: data.sender_id,
-                    receiver_id: data.receiver_id,
-                    message: data.message,
-                    type: data.type,
-                    anyfile: data.anyfile
-                });
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                if (newmessage.save())
-                    return;
-                else
-                    return;
-
-            })
-            // if (!req.body.receiver_id)
-            //     return res.status(400).send({ message: "Invalid receiver_id" });
-            // if (!req.body.message)
-            //     return res.status(400).send({ message: "Invalid message" });
-
-
-
-    } catch (error) {
-        return;
-    }
-};
-
-// Send Message
 exports.send_message = async(data) => {
     try {
 
@@ -87,7 +43,8 @@ exports.send_message = async(data) => {
             sender_id: data.sender_id,
             receiver_id: data.receiver_id,
             message: data.message,
-            type: data.type
+            type: data.type,
+            anyfile: data.anyfile
         })
 
         await new Promise(resolve => setTimeout(resolve, 1000));
