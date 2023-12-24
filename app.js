@@ -60,7 +60,10 @@ io.on('connection', (socket) => {
     });
     socket.on('sendmessage', (data) => {
         console.log(data)
-        messagescontroller.send_message(data);
+        if (data.type == "text")
+            messagescontroller.send_message(data);
+        else if (data.type == "image")
+            messagescontroller.send_message_with_image(data);
         io.emit('receivemessage', data);
     });
 

@@ -13,11 +13,15 @@ const schema = new mongoose.Schema({
     },
     message: {
         type: String,
-        required: true,
+        required: false,
     },
     type: {
         type: String,
         required: true,
+    },
+    anyfile: {
+        type: String,
+        required: false,
     }
 }, { timestamps: true });
 
