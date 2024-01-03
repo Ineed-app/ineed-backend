@@ -1,6 +1,7 @@
 const Service = require("../models/Services");
 const jwt = require("jsonwebtoken");
 const { response } = require("express");
+const Suggestion = require('../models/Suggestion')
 
 
 
@@ -93,3 +94,75 @@ exports.update_service = async(req, res) => {
         return res.status(400).json({ message: error });
     }
 }
+
+
+// Get Suggestions
+exports.getsuggestions = async(req, res) => {
+    try {
+        if (req.body.stext) {
+            console.log(req.body.stext)
+            const mysuggestions = await Suggestion.find({ $text: { $search: req.body.stext } }, { score: { $meta: "textScore" } })
+                .sort({ score: { $meta: 'textScore' }, clicks: -1 })
+            console.log(mysuggestions)
+            if (mysuggestions) {
+                return res.status(200).json(mysuggestions);
+            } else {
+                return res.status(400).json({ message: "No Suggestions Found" });
+            }
+
+        }
+
+
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+// Get Suggestions
+exports.post_suggestion = async(req, res) => {
+    try {
+        if (!req.body.stext)
+            return res.status(400).json({ message: "stext is Missing" });
+
+        const old_suggestion = await Suggestion.findOne({ suggestion: req.body.stext });
+        if (old_suggestion) {
+            console.log("Old suggestion exists")
+            const validate_user = await Suggestion.findOne({ users: { $elemMatch: { device_id: req.device_id } } });
+            if (validate_user) {
+                console.log("user exists in suggestions, adding only click")
+                const update_click = await Suggestion.updateOne({ suggestion: req.body.stext }, { $inc: { clicks: 1 } });
+                if (update_click)
+                    return res.status(200).json(update_click);
+                else
+                    return res.status(400).json({ message: "something went wrong" });
+            } else {
+                console.log("Adding click and User")
+                const update_click = await Suggestion.updateOne({ suggestion: req.body.stext }, { $push: { users: [{ device_id: req.device_id }] }, $inc: { clicks: 1 } });
+                if (update_click) {
+                    return res.status(200).json(update_click);
+                } else
+                    return res.status(400).json({ message: "something went wrong 2" });
+            }
+        }
+
+        const new_suggestion = await Suggestion({
+            suggestion: req.body.stext,
+            users: [{ device_id: req.device_id }]
+        });
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        if (new_suggestion.save()) {
+            return res.status(200).json(new_suggestion);
+
+        } else
+            return res.status(400).json({ message: "Something went wrong 3" });
+
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+
+
+
+
+
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};

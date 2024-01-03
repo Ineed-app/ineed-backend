@@ -44,6 +44,8 @@ router.post("/services", servicecontroller.post_service)
 router.delete("/services/:serviceid", servicecontroller.del_service)
 router.get("/services", servicecontroller.getall_service)
 router.put("/services/:serviceid", servicecontroller.update_service)
+router.post("/suggestions", verify, servicecontroller.getsuggestions)
+router.post("/addsuggestions", verify, servicecontroller.post_suggestion)
 
 //messages
 router.post("/message", verify, messagecontroller.send_message)
