@@ -99,17 +99,25 @@ exports.update_service = async(req, res) => {
 // Get Suggestions
 exports.getsuggestions = async(req, res) => {
     try {
-        if (req.body.stext) {
+        var mysuggestions = "";
+        console.log("length: " + req.body.stext.trim().length)
+        if (req.body.stext.trim().length != 0) {
             console.log(req.body.stext)
-            const mysuggestions = await Suggestion.find({ $text: { $search: req.body.stext } }, { score: { $meta: "textScore" } })
-                .sort({ score: { $meta: 'textScore' }, clicks: -1 })
-            console.log(mysuggestions)
-            if (mysuggestions) {
-                return res.status(200).json(mysuggestions);
-            } else {
-                return res.status(400).json({ message: "No Suggestions Found" });
-            }
+            mysuggestions = await Suggestion.find({ $text: { $search: req.body.stext } }, { score: { $meta: "textScore" } })
+                .sort({ score: { $meta: 'textScore' }, clicks: -1 }).limit(4)
 
+
+        } else {
+            console.log("dd" + req.body.stext)
+            mysuggestions = await Suggestion.find().sort({ clicks: -1 }).limit(4)
+
+        }
+
+        console.log(mysuggestions)
+        if (mysuggestions) {
+            return res.status(200).json(mysuggestions);
+        } else {
+            return res.status(400).json({ message: "No Suggestions Found" });
         }
 
 
