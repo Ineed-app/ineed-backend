@@ -9,6 +9,7 @@ const { initializeApp, applicationDefault } = require('firebase-admin/app');
 // const https = require("https")
 const http = require("http")
 const messagescontroller = require('./controllers/messages');
+const requestscontroller = require('./controllers/requests');
 // const fs = require('fs')
 
 const server = http.createServer(app);
@@ -63,6 +64,18 @@ io.on('connection', (socket) => {
         messagescontroller.send_message(data);
         io.emit('receivemessage', data);
     });
+
+    socket.on('sendrequest', (data) => {
+        console.log("send request: " + data)
+        io.emit('receiverequest', data)
+    })
+
+    socket.on('acceptrequest', (data) => {
+        console.log("accept request: " + data);
+        const acceptstatus = requestscontroller.acceptrequest(data);
+        if (acceptstatus)
+            io.emit('acknowledgerequest', data)
+    })
 
 });
 

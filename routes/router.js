@@ -11,6 +11,7 @@ const servicecatcontroller = require("../controllers/servicecat")
 const servicecontroller = require("../controllers/services")
 const messagecontroller = require('../controllers/messages')
 const fileuploadcontroller = require('../controllers/fileupload')
+const requestscontroller = require('../controllers/requests')
 
 
 // Auth
@@ -53,6 +54,10 @@ router.get("/onloadmessages/:receiver_id", verify, messagecontroller.getallmessa
 
 //fileupload
 router.post("/fileupload", verify, fileuploadcontroller.fileupload)
+
+//requests
+router.post("/saverequest", verify, requestscontroller.addrequest);
+router.get("/request/:request_id", verify, requestscontroller.requeststatus);
 
 
 

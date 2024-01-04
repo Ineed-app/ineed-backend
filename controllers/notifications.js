@@ -10,7 +10,7 @@ exports.test = async(req, res) => {
     try {
 
 
-        const receivedToken = 'AAAAp_ti30Q:APA91bEoQmHP1-p0eGKzQgVJ4sFHDA0y1kjnI02lLXOzUSyIUj44QsABQX7QWrslFXa-TklvIB0doPOdtW_qELhXVmLnUnAjnYvnrnz7M7rd9tf0AZUWC86z7GuTo2T05QybZ0VkqKzK';
+        const receivedToken = 'cQE9A2nARPuofH0GfZeH9h:APA91bHp8wy9NZ6oLQjeR-ACTo_Necy7t6G1HmCueTUAG2t5kJxWyHhCgvd4nkFieSw798EDArFCpW1-RV9FX0olZUbx4YuSQ6R-1_1Vm9WsnKE7o9xHpvJnev2qSlh_tK4c5-yy3c44';
 
         const message = {
             notification: {
@@ -18,7 +18,7 @@ exports.test = async(req, res) => {
                 body: 'This is a Test Notification'
             },
             data: { Key1: 'ValueSomething', AgainKey: 'NewHelp', OwnKey: '12345' },
-            token: "fErwoSp-Tce7rIBAo4WUY_:APA91bExJTNS5LVWozZfm2Ke8zSvf7uTX2XLneOrlAGNgaQj4gglzc7-1Rv_iN-5tMcAD0Z38HwCEowRGXlzsiXg8-fHD9Mps36kwocTa0Kmd42y36agyubC9BXl3AqiZCOhl4v0Z0pV",
+            token: "cQE9A2nARPuofH0GfZeH9h:APA91bHp8wy9NZ6oLQjeR-ACTo_Necy7t6G1HmCueTUAG2t5kJxWyHhCgvd4nkFieSw798EDArFCpW1-RV9FX0olZUbx4YuSQ6R-1_1Vm9WsnKE7o9xHpvJnev2qSlh_tK4c5-yy3c44",
         };
 
         getMessaging()
